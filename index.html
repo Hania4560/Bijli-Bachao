@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bijli Bachao – see where your electricity goes</title>
+<meta name="description" content="Bijli Bachao shows a household where its electricity goes and what a smarter routine saves.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=DM+Sans:wght@400;500;700&family=Noto+Nastaliq+Urdu:wght@700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#eef2f6;--card:#fff;--ink:#12212b;--mute:#566673;--line:#d5dde5;--volt:#ffc400;--save:#0f7b6c;--save-bg:#dff3ee;--waste:#d9453b;--r:14px}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.55 "DM Sans",system-ui,sans-serif}
+h1,h2,h3{font-family:"Bricolage Grotesque","DM Sans",system-ui,sans-serif;line-height:1.08;margin:0}
+h1{font-size:clamp(2.4rem,6vw,4.4rem);font-weight:800;letter-spacing:-.02em}
+h2{font-size:clamp(1.7rem,3.5vw,2.4rem);font-weight:800;letter-spacing:-.01em}
+h3{font-size:1.15rem;font-weight:800}
+a{color:inherit}
+.wrap{max-width:1100px;margin:0 auto;padding:0 20px}
+section{padding:64px 0}
+nav{position:sticky;top:0;z-index:5;background:rgba(238,242,246,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;justify-content:space-between;height:56px;gap:12px}
+.logo{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:1.2rem;text-decoration:none}
+.logo b{background:var(--volt);padding:0 6px;border-radius:6px;margin-right:6px}
+nav ul{display:flex;gap:18px;list-style:none;margin:0;padding:0;font-size:.95rem}
+nav a:hover{text-decoration:underline}
+.btn{display:inline-block;background:var(--ink);color:#fff;border:0;border-radius:10px;padding:12px 20px;font:700 1rem "DM Sans",sans-serif;cursor:pointer;text-decoration:none}
+.btn.volt{background:var(--volt);color:var(--ink)}
+.btn:hover{filter:brightness(1.12)}
+:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+.badge{display:inline-block;font-size:.8rem;font-weight:700;background:#fff3c2;border:1px solid #e6c34a;border-radius:99px;padding:2px 10px}
+.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center;padding-top:48px}
+.hero p.lead{font-size:1.15rem;color:var(--mute);max-width:46ch;margin:18px 0 24px}
+.meter{background:var(--ink);color:#fff;border-radius:22px;padding:24px;text-align:center}
+.meter svg{width:100%;max-width:300px}
+.meter .big{font:800 2.6rem "Bricolage Grotesque",sans-serif;margin-top:-118px;height:118px;display:flex;flex-direction:column;justify-content:center}
+.meter .big small{font:500 .85rem "DM Sans",sans-serif;color:#9fb0bd}
+.meter label{display:block;font-size:.9rem;color:#9fb0bd;margin-top:4px}
+.meter input{width:100%;accent-color:var(--volt)}
+.bills{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
+.bills div{background:#1c3140;border-radius:10px;padding:10px}
+.bills span{display:block;font-size:.8rem;color:#9fb0bd}
+.bills strong{font:800 1.4rem "Bricolage Grotesque",sans-serif}
+.bills .good strong{color:#5fe3c6}
+.grid{display:grid;grid-template-columns:1.1fr .9fr;gap:20px;margin-top:28px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px}
+.head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.row{display:grid;grid-template-columns:auto 1fr 130px;gap:10px 12px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
+.row:first-of-type{border-top:0}
+.row .nm{font-weight:700}.row .nm small{display:block;font-weight:400;color:var(--mute)}
+.row input[type=range]{width:100%;accent-color:var(--ink)}
+.row .kwh{text-align:right;font-variant-numeric:tabular-nums;font-weight:700}
+.row .kwh small{display:block;font-weight:400;color:var(--save)}
+.row .tip{grid-column:2/4;font-size:.88rem;color:var(--save);background:var(--save-bg);border-radius:8px;padding:4px 10px}
+.row.off{opacity:.45}
+.sw{display:flex;align-items:center;gap:10px;font-weight:700;cursor:pointer}
+.sw input{width:44px;height:24px;appearance:none;background:#b8c4cd;border-radius:99px;position:relative;cursor:pointer;transition:background .2s;margin:0}
+.sw input::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:transform .2s}
+.sw input:checked{background:var(--save)}.sw input:checked::after{transform:translateX(20px)}
+.presets{display:flex;gap:8px;flex-wrap:wrap}
+.chip{background:#fff;border:1px solid var(--line);border-radius:99px;padding:6px 14px;font:500 .9rem "DM Sans",sans-serif;cursor:pointer}
+.chip:hover{border-color:var(--ink)}
+.legend{display:flex;gap:16px;font-size:.85rem;color:var(--mute);flex-wrap:wrap;margin-top:6px}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+#chart{width:100%;height:auto}
+.stat{font:800 2.2rem "Bricolage Grotesque",sans-serif;color:var(--save)}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+.stats div{background:var(--save-bg);border-radius:12px;padding:14px}
+.stats span{display:block;font-size:.88rem;color:var(--mute)}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:28px}
+.steps .card b{display:inline-grid;place-items:center;width:34px;height:34px;border-radius:50%;background:var(--volt);font-weight:800;margin-bottom:12px}
+.steps p{color:var(--mute);margin:8px 0 0}
+.impact{background:var(--ink);color:#fff;border-radius:26px;padding:40px 28px}
+.impact .stats div{background:#1c3140}.impact .stats span{color:#9fb0bd}.impact .stat{color:#5fe3c6}
+.impact .stats{grid-template-columns:repeat(4,1fr)}
+.impact p{color:#9fb0bd;max-width:60ch}
+.team{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-top:24px}
+.sub{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:20px}
+.sub ul{margin:8px 0 0;padding-left:18px;color:var(--mute)}
+footer{padding:28px 0 48px;color:var(--mute);font-size:.9rem;border-top:1px solid var(--line)}
+@media(max-width:860px){.hero,.grid,.sub,.steps{grid-template-columns:1fr}.impact .stats{grid-template-columns:1fr 1fr}nav ul{display:none}section{padding:44px 0}.row{grid-template-columns:auto 1fr}.row .kwh{grid-column:2;text-align:left}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+.top{background:radial-gradient(900px 420px at 88% -5%,#27506a 0%,transparent 65%),var(--ink);color:#fff;padding-bottom:56px}
+.top .lead{color:#b4c3ce}
+.top .badge{background:#1c3140;border-color:#33576d;color:#ffe9a0}
+.urdu{font:700 1.7rem/1.9 "Noto Nastaliq Urdu",serif;color:var(--volt);margin-top:10px;direction:rtl;text-align:left}
+.meter{background:#0b1720;border:1px solid #2a4658;box-shadow:0 30px 80px rgba(0,0,0,.45)}
+.pulse{display:inline-block;width:8px;height:8px;border-radius:50%;background:#5fe3c6;margin-right:7px;animation:pl 1.6s infinite}
+@keyframes pl{50%{opacity:.25}}
+.tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:24px}
+.tags span{font-size:.85rem;border:1px solid #33576d;border-radius:99px;padding:3px 12px;color:#b4c3ce}
+.sh{display:grid;grid-template-columns:150px 1fr 74px;gap:10px;align-items:center;font-size:.86rem;margin:7px 0}
+.sh span:first-child{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sh em{font-style:normal;text-align:right;font-variant-numeric:tabular-nums}
+.sh i{display:block;height:10px;border-radius:6px;background:var(--ink);transition:width .4s}
+.slab{height:12px;background:#e3e9ef;border-radius:8px;overflow:hidden;margin:8px 0 4px}
+.slab i{display:block;height:100%;background:linear-gradient(90deg,var(--save),var(--volt),var(--waste));transition:width .4s}
+</style>
+</head>
+<body>
+<nav><div class="wrap"><a class="logo" href="#top"><b>⚡</b>Bijli Bachao</a>
+<ul><li><a href="#demo">Dashboard</a></li><li><a href="#how">How it works</a></li><li><a href="#impact">Impact</a></li><li><a href="#team">Team</a></li></ul>
+<a class="btn volt" href="#demo">Try the demo</a></div></nav>
+
+<main id="top">
+<div class="top"><div class="wrap hero">
+  <div>
+    <span class="badge"><span class="pulse"></span>Hackathon demo · simulated household data</span>
+    <h1 style="margin-top:16px">Your meter is running right now. Know what&rsquo;s driving it.</h1>
+    <div class="urdu" lang="ur">بجلی بچاؤ، پیسے بچاؤ</div>
+    <p class="lead">Bijli Bachao breaks a household&rsquo;s electricity use down by appliance, hour and rupee, then shows exactly which habits to change to cut the bill.</p>
+    <a class="btn volt" href="#demo">Open the dashboard</a>
+    <a class="btn" href="#how" style="margin-left:8px;background:transparent;color:#fff;border:2px solid #fff">How it works</a>
+    <div class="tags"><span>Track: Smart Agriculture &amp; Climate</span><span>Runs fully in the browser</span><span>No sign-up, no backend</span></div>
+  </div>
+  <div class="meter" aria-live="polite">
+    <svg viewBox="0 0 200 200" role="img" aria-label="Live power gauge">
+      <circle cx="100" cy="100" r="80" fill="none" stroke="#1c3140" stroke-width="16" stroke-linecap="round" stroke-dasharray="377 503" transform="rotate(135 100 100)"/>
+      <circle id="arc" cx="100" cy="100" r="80" fill="none" stroke="#ffc400" stroke-width="16" stroke-linecap="round" stroke-dasharray="0 503" transform="rotate(135 100 100)" style="transition:stroke-dasharray .5s,stroke .5s"/>
+    </svg>
+    <div class="big"><span id="watts">0 W</span><small id="clock">at 9 pm · simulated</small></div>
+    <label for="hour">Simulated time of day</label>
+    <input id="hour" type="range" min="0" max="23" value="21">
+    <div class="bills">
+      <div><span>Bill this month</span><strong id="bNow">₹0</strong></div>
+      <div class="good"><span>With savings plan</span><strong id="bPlan">₹0</strong></div>
+    </div>
+  </div>
+</div></div>
+
+<section id="demo"><div class="wrap">
+  <h2>Household energy dashboard</h2>
+  <p style="color:var(--mute);margin:8px 0 0;max-width:64ch">Sample 3BHK flat. Change hours, switch appliances off, or load a season. All numbers update instantly. <span class="badge">Simulated data</span></p>
+  <div class="grid">
+    <div class="card">
+      <div class="head"><h3>Appliances</h3>
+        <div class="presets"><button class="chip" data-p="summer">Summer</button><button class="chip" data-p="winter">Winter</button><button class="chip" data-p="away">Away on holiday</button><select id="reg" class="chip" aria-label="Tariff region"><option value="pk">Pakistan (Rs)</option><option value="in">India (₹)</option></select></div></div>
+      <div id="rows"></div>
+    </div>
+    <div style="display:grid;gap:20px;align-content:start">
+      <div class="card">
+        <div class="head"><h3>Savings plan</h3>
+          <label class="sw"><input id="plan" type="checkbox" checked> Apply plan</label></div>
+        <div class="stats">
+          <div><span>Saved per month</span><div class="stat" id="sMoney">₹0</div></div>
+          <div><span>Units saved</span><div class="stat" id="sKwh">0</div></div>
+        </div>
+        <p style="font-size:.85rem;color:var(--mute);margin:12px 0 0">Plan = smarter AC settings, timers, and moving heavy loads out of the 6&ndash;11 pm peak. Tariff is an illustrative slab (<span id="tn"></span>); swap in your utility&rsquo;s official rates.</p>
+      </div>
+      <div class="card"><h3>Where the money goes</h3><div id="share" style="margin-top:8px"></div>
+        <h3 style="margin-top:18px;font-size:1rem">Slab meter</h3><div class="slab"><i id="slabBar"></i></div><div id="slabTxt" style="font-size:.85rem;color:var(--mute)"></div></div>
+      <div class="card">
+        <h3>24-hour load</h3>
+        <svg id="chart" viewBox="0 0 400 200" role="img" aria-label="Hourly electricity load chart"></svg>
+        <div class="legend"><span><i style="background:#9fb0bd"></i>Current routine</span><span><i style="background:var(--save)"></i>With plan</span><span><i style="background:#ffe9a0"></i>Evening peak</span></div>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<section id="how"><div class="wrap">
+  <h2>How it works</h2>
+  <div class="steps">
+    <div class="card"><b>1</b><h3>Read the load</h3><p>A smart plug or meter reader sends each appliance&rsquo;s wattage. In this demo that feed is simulated.</p></div>
+    <div class="card"><b>2</b><h3>Price every habit</h3><p>Watts × hours × your tariff slab gives the rupee cost of each appliance, and shows when a slab jump is coming.</p></div>
+    <div class="card"><b>3</b><h3>Apply the plan</h3><p>Rules suggest timers, setpoints and off-peak shifts. Switch the plan on to see the new bill and the lower evening peak.</p></div>
+  </div>
+</div></section>
+
+<section id="impact"><div class="wrap"><div class="impact">
+  <h2>What this household saves</h2>
+  <p style="margin:10px 0 24px">Yearly figures from the dashboard above, then scaled to 1 lakh homes. CO₂ uses <span id="cf"></span> kg per unit (approximate; replace with the official grid factor). Projection, not measured data.</p>
+  <div class="stats">
+    <div><span>Rupees saved / year</span><div class="stat" id="iMoney">₹0</div></div>
+    <div><span>Units saved / year</span><div class="stat" id="iKwh">0</div></div>
+    <div><span>CO₂ avoided / year</span><div class="stat" id="iCo2">0 kg</div></div>
+    <div><span>1 lakh homes, units / year</span><div class="stat" id="iScale">0</div></div>
+  </div>
+</div></div></section>
+
+<section id="team"><div class="wrap">
+  <h2>Team and submission</h2>
+  <div class="team" id="teamList"></div>
+  <div class="sub">
+    <div class="card"><h3>What&rsquo;s real, what&rsquo;s simulated</h3>
+      <ul><li>Real: all calculations, slab billing, charts, savings logic</li><li>Simulated: appliance readings, live wattage, household profile</li><li>Not connected: smart meters and plugs (next step)</li></ul></div>
+    <div class="card"><h3>Next steps</h3>
+      <ul><li>Read real data from smart plugs via MQTT</li><li>Use each state&rsquo;s actual tariff and time-of-day rates</li><li>WhatsApp nudges when a slab jump is near</li></ul></div>
+  </div>
+</div></section>
+</main>
+<footer><div class="wrap">Bijli Bachao · Hackathon prototype · All household data on this page is simulated.</div></footer>
+
+<script>
+// ---- EDIT ME: team details ----
+const TEAM=[{n:"Hania Atiq",r:"Full-stack"},{n:"Maryam Ejaz",r:"UI design"},{n:"Hifsa Eman",r:"Data and pitch"}];
+
+// w = watts, h = hours/day, s = usual start hour, f = plan factor on energy, ps = plan start hour
+const BASE=[
+ {id:"ac",n:"Air conditioner 1.5 ton",w:1500,h:6,s:21,f:.72,ps:21,t:"Set 24°C with sleep timer: about 28% less"},
+ {id:"fan",n:"Ceiling fans (3)",w:225,h:10,s:20,f:.8,ps:20,t:"Switch off in empty rooms"},
+ {id:"fr",n:"Refrigerator",w:90,h:24,s:0,f:1,ps:0,t:""},
+ {id:"gy",n:"Water heater",w:2000,h:1,s:6,f:.5,ps:6,t:"Use a timer: heat 30 minutes, not 60"},
+ {id:"li",n:"LED lights",w:60,h:6,s:18,f:.7,ps:18,t:"Lights off when the room is empty"},
+ {id:"wm",n:"Washing machine",w:500,h:1,s:19,f:1,ps:11,t:"Run full loads at 11 am, off-peak"},
+ {id:"pu",n:"Water pump",w:750,h:1,s:19,f:1,ps:7,t:"Fill the tank at 7 am, not in the evening peak"},
+ {id:"tv",n:"TV and set-top box",w:100,h:4,s:19,f:1,ps:19,t:""},
+ {id:"sb",n:"Standby chargers and routers",w:25,h:24,s:0,f:.3,ps:0,t:"Switch off at the plug overnight"}
+];
+const PRESETS={summer:{ac:8,fan:12,gy:.2,li:6},winter:{ac:0,fan:2,gy:1.5,li:7},away:{ac:0,fan:0,gy:0,li:1,wm:0,pu:.5,tv:0}};
+const REG={pk:{sym:"Rs ",co2:.45,slabs:[[100,12],[300,25],[1e9,40]]},in:{sym:"₹",co2:.82,slabs:[[100,3],[300,5.5],[1e9,7.5]]}};
+const S={apps:BASE.map(a=>({...a,on:true})),plan:true,hour:21,reg:"pk"};
+const $=id=>document.getElementById(id);
+const inr=n=>REG[S.reg].sym+Math.round(n).toLocaleString("en-IN");
+function anim(el,to,f=inr){const from=el._v??0;el._v=to;if(matchMedia("(prefers-reduced-motion:reduce)").matches){el.textContent=f(to);return}const t0=performance.now();(function s(t){const k=Math.min((t-t0)/450,1);el.textContent=f(from+(to-from)*(1-Math.pow(1-k,3)));if(k<1)requestAnimationFrame(s)})(t0)}
+const num=n=>Math.round(n).toLocaleString("en-IN");
+
+function bill(u){let t=0,lo=0;for(const [hi,r] of REG[S.reg].slabs){if(u>lo)t+=(Math.min(u,hi)-lo)*r;lo=hi}return t}
+function units(plan){return S.apps.reduce((t,a)=>t+(a.on?a.w*a.h*30/1000*(plan?a.f:1):0),0)}
+function loadAt(hr,plan){return S.apps.reduce((t,a)=>{
+  if(!a.on||!a.h)return t;
+  const st=plan?a.ps:a.s,d=(hr-st+24)%24;
+  const frac=Math.max(0,Math.min(1,Math.min(a.h,24)-d));
+  return t+a.w*(plan?a.f:1)*(a.h>=24?1:frac);},0)}
+
+function buildRows(){
+  $("rows").innerHTML=S.apps.map(a=>`<div class="row" id="r-${a.id}">
+   <input type="checkbox" ${a.on?"checked":""} data-on="${a.id}" aria-label="Include ${a.n}">
+   <div><div class="nm">${a.n}<small>${a.w} W · <span id="h-${a.id}"></span> h/day</small></div>
+   <input type="range" min="0" max="24" step="0.5" value="${a.h}" data-h="${a.id}" aria-label="Hours per day for ${a.n}"></div>
+   <div class="kwh" id="k-${a.id}"></div>
+   ${a.t?`<div class="tip" id="t-${a.id}">${a.t}</div>`:""}</div>`).join("");
+}
+
+function render(){
+  const uNow=units(false),uPlan=units(true);
+  const bNow=bill(uNow),bPlan=bill(uPlan);
+  S.apps.forEach(a=>{
+    $("h-"+a.id).textContent=a.h;
+    const k=a.w*a.h*30/1000;
+    $("k-"+a.id).innerHTML=a.on?`${k.toFixed(0)} units${S.plan&&a.f<1?`<small>−${(k*(1-a.f)).toFixed(0)} with plan</small>`:""}`:"off";
+    $("r-"+a.id).classList.toggle("off",!a.on);
+    const t=$("t-"+a.id);if(t)t.style.display=S.plan&&a.on&&a.h?"":"none";
+  });
+  // hero meter (simulated jitter added in tick)
+  anim($("bNow"),bNow);anim($("bPlan"),bPlan);
+  anim($("sMoney"),bNow-bPlan);$("sKwh").textContent=num(uNow-uPlan);
+  const yK=(uNow-uPlan)*12;
+  anim($("iMoney"),(bNow-bPlan)*12);$("iKwh").textContent=num(yK);
+  $("iCo2").textContent=num(yK*REG[S.reg].co2)+" kg";$("iScale").textContent=yK*1e5>=1e7?(yK*1e5/1e7).toFixed(1)+" crore":num(yK*1e5);
+  $("clock").textContent="at "+(S.hour%12||12)+(S.hour<12?" am":" pm")+" · simulated";
+  const R_=REG[S.reg],tot=uNow||1;
+  $("cf").textContent=R_.co2;
+  let lo=0;$("tn").textContent=R_.slabs.map(([hi,r])=>{const x=(hi>1e8?"above "+lo:lo+"-"+hi)+" units: "+R_.sym.trim()+r;lo=hi;return x}).join(", ");
+  $("share").innerHTML=S.apps.filter(a=>a.on&&a.h).map(a=>({n:a.n,k:a.w*a.h*30/1000})).sort((x,y)=>y.k-x.k).slice(0,5)
+   .map(x=>`<div class="sh"><span>${x.n}</span><div><i style="width:${(x.k/tot*100).toFixed(0)}%"></i></div><em>${inr(bNow*x.k/tot)}</em></div>`).join("")||"<p style='color:var(--mute)'>Switch an appliance on to see its cost.</p>";
+  $("slabBar").style.width=Math.min(uNow/400,1)*100+"%";
+  const nx=R_.slabs.find(([hi])=>uNow<hi);
+  $("slabTxt").textContent=num(uNow)+" units this month"+(nx&&nx[0]<1e8?" · "+num(nx[0]-uNow)+" units until the next, pricier slab":" · in the highest slab");
+  chart();tick();
+}
+
+function chart(){
+  const now=[],pl=[];for(let h=0;h<24;h++){now.push(loadAt(h,false));pl.push(loadAt(h,true))}
+  const max=Math.max(1000,...now)*1.1,W=400,H=170,bw=W/24;
+  let g=`<rect x="${18*bw}" y="0" width="${5*bw}" height="${H}" fill="#ffe9a0"/>`;
+  for(let h=0;h<24;h++){
+    const a=now[h]/max*H,b=pl[h]/max*H,x=h*bw;
+    g+=`<rect x="${x+1.5}" y="${H-a}" width="${bw-3}" height="${a}" rx="2" fill="#9fb0bd"/>`;
+    if(S.plan)g+=`<rect x="${x+4}" y="${H-b}" width="${bw-8}" height="${b}" rx="2" fill="#0f7b6c"/>`;
+    if(h%3===0)g+=`<text x="${x+bw/2}" y="190" text-anchor="middle" font-size="9" fill="#566673">${h%12||12}${h<12?"a":"p"}</text>`;
+  }
+  $("chart").innerHTML=g+`<text x="${18*bw+3}" y="11" font-size="9" fill="#7a5d00">peak</text>`;
+}
+
+function tick(){ // simulated live reading
+  const p=S.plan,base=loadAt(S.hour,p),w=Math.max(0,base*(1+(Math.random()-.5)*.06));
+  $("watts").innerHTML=num(w)+" W";
+  $("arc").setAttribute("stroke-dasharray",`${Math.min(w/4000,1)*377} 503`);
+  $("arc").setAttribute("stroke",w>2500?"#ff6b5e":"#ffc400");
+}
+
+document.addEventListener("input",e=>{
+  const d=e.target.dataset;
+  if(d.h){S.apps.find(a=>a.id===d.h).h=+e.target.value;render()}
+  if(d.on){S.apps.find(a=>a.id===d.on).on=e.target.checked;render()}
+  if(e.target.id==="reg"){S.reg=e.target.value;render()}
+  if(e.target.id==="plan"){S.plan=e.target.checked;render()}
+  if(e.target.id==="hour"){S.hour=+e.target.value;render()}
+});
+document.querySelectorAll("[data-p]").forEach(b=>b.onclick=()=>{
+  S.apps.forEach(a=>{const base=BASE.find(x=>x.id===a.id);a.h=base.h;a.on=true});
+  const p=PRESETS[b.dataset.p];
+  S.apps.forEach(a=>{if(a.id in p){a.h=p[a.id];a.on=p[a.id]>0}});
+  buildRows();render();
+});
+$("teamList").innerHTML=TEAM.map(m=>`<div class="card"><h3>${m.n}</h3><span style="color:var(--mute)">${m.r}</span></div>`).join("");
+buildRows();render();setInterval(tick,1500);
+</script>
+</body>
+</html>
